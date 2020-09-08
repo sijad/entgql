@@ -1,0 +1,66 @@
+{{- $node := . -}}
+{{- $name := .Name -}}
+
+{{/* Enums */}}
+enum {{$name}}OrderBy {
+  NATURAL
+  ID_ASC
+  ID_DESC
+{{- range $i := $node.Indexes}}
+  {{$i.Name | upperCase}}_ASC
+  {{$i.Name | upperCase}}_DESC
+{{- end}}
+}
+
+{{/* Types */}}
+type {{$name}} implements Node {
+  id: ID!
+{{- range $f := $node.Fields}}
+  {{$f.Name}}: {{$f.Type.String | upperCaseFirst}}{{if not $f.Nillable}}!{{end}}
+{{- end}}
+}
+
+"""A `{{$name}}` edge in the connection."""
+type {{$name}}Edge {
+  """A cursor for use in pagination."""
+  cursor: String!
+  """The `{{$name}}` at the end of the edge."""
+  node: {{$name}}!
+}
+
+"""A connection to a list of `{{$name}}` values."""
+type {{$node.Name}}Connection {
+  """A list of edges which contains the `{{$name}}` and cursor to aid in pagination."""
+  edges: [{{$name}}Edge!]!
+  """Information to aid in pagination."""
+  pageInfo: PageInfo!
+  """The count of all `{{$name}}` you could get from the connection."""
+  totalCount: Int!
+}
+
+{{/* Inputes */}}
+input {{$name}}WhereInput {
+  id: StringFilter
+{{- range $f := $node.Fields}}
+{{- if $f.Unique}}
+  {{$f.Name}}: {{$f.Type.String | upperCaseFirst}}Filter
+{{- end}}
+{{- end}}
+  AND: [{{$name}}WhereInput!]
+  OR: [{{$name}}WhereInput!]
+  NOT: [{{$name}}WhereInput!]
+}
+
+{{/* Query */}}
+extend type Query {
+  {{$name | lowerCaseFirst}}(id: ID!): {{$name}}
+{{- range $f := $node.Fields}}
+{{- if $f.Unique}}
+  {{$name | lowerCaseFirst}}By{{$f.Name | upperCaseFirst}}({{$f.Name | lowerCaseFirst}}: {{$f.Type.String | upperCaseFirst}}!): {{$name}}
+{{- end}}
+{{- end}}
+  """Reads and enables pagination through a set of `{{$name}}`."""
+  {{$name | lowerCaseFirst | pluralize}}(after: String, before: String, first: Int, last: Int, where: {{$name}}WhereInput, orderBy: [{{$name}}OrderBy!]): {{$name}}Connection
+}
+
+{{/* Mutation */}}
