@@ -4,6 +4,7 @@ import (
 	"github.com/facebook/ent"
 	"github.com/facebook/ent/schema/edge"
 	"github.com/facebook/ent/schema/field"
+	"github.com/facebook/ent/schema/index"
 )
 
 // User holds the schema definition for the User entity.
@@ -28,5 +29,13 @@ func (User) Edges() []ent.Edge {
 			Ref("users"),
 		edge.From("manage", Group.Type).
 			Ref("admin"),
+	}
+}
+
+// IIndexes of the user
+func (User) Indexes() []ent.Index {
+	return []ent.Index{
+		// non-unique index.
+		index.Fields("name"),
 	}
 }
