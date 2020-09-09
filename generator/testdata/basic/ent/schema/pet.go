@@ -4,6 +4,7 @@ import (
 	"github.com/facebook/ent"
 	"github.com/facebook/ent/schema/edge"
 	"github.com/facebook/ent/schema/field"
+	"github.com/facebook/ent/schema/mixin"
 )
 
 type Pet struct {
@@ -24,5 +25,11 @@ func (Pet) Edges() []ent.Edge {
 		edge.From("owner", User.Type).
 			Ref("pets").
 			Unique(),
+	}
+}
+
+func (Pet) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		mixin.Time{},
 	}
 }

@@ -4,6 +4,7 @@ import (
 	"github.com/facebook/ent"
 	"github.com/facebook/ent/schema/edge"
 	"github.com/facebook/ent/schema/field"
+	"github.com/facebook/ent/schema/mixin"
 )
 
 // Group holds the schema definition for the Group entity.
@@ -24,5 +25,11 @@ func (Group) Edges() []ent.Edge {
 		edge.To("users", User.Type),
 		edge.To("admin", User.Type).
 			Unique(),
+	}
+}
+
+func (Group) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		mixin.Time{},
 	}
 }

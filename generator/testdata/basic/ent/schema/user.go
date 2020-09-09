@@ -5,6 +5,7 @@ import (
 	"github.com/facebook/ent/schema/edge"
 	"github.com/facebook/ent/schema/field"
 	"github.com/facebook/ent/schema/index"
+	"github.com/facebook/ent/schema/mixin"
 )
 
 // User holds the schema definition for the User entity.
@@ -33,10 +34,16 @@ func (User) Edges() []ent.Edge {
 	}
 }
 
-// IIndexes of the user
+// Indexes of the user
 func (User) Indexes() []ent.Index {
 	return []ent.Index{
 		// non-unique index.
 		index.Fields("name"),
+	}
+}
+
+func (User) Mixin() []ent.Mixin {
+	return []ent.Mixin{
+		mixin.Time{},
 	}
 }
