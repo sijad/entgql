@@ -60,6 +60,19 @@ input {{$name}}WhereInput {
   NOT: [{{$name}}WhereInput!]
 }
 
+input Delete{{$name}}Input {
+  clientMutationId: String
+  id: ID!
+}
+
+input Delete{{$name}}Payload {
+  """The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations."""
+  clientMutationId: String
+  """The `{{$name}}` that was deleted by this mutation."""
+  {{$name | lowerCaseFirst}}: {{$name}}!
+  deleted{{$name}}NodeId: ID!
+}
+
 {{/* Query */ -}}
 extend type Query {
   {{$name | lowerCaseFirst}}(id: ID!): {{$name}}
@@ -73,3 +86,6 @@ extend type Query {
 }
 
 {{/* Mutation */ -}}
+extend type Mutation {
+  delete{{$name}}(input: Delete{{$name}}Input!): Delete{{$name}}Payload
+}
