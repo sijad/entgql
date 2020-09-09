@@ -16,7 +16,7 @@ enum {{$name}}OrderBy {
 type {{$name}} implements Node {
   id: ID!
 {{- range $f := $node.Fields}}
-  {{$f.Name | camelize | lowerCaseFirst}}: {{$f.Type.String | upperCaseFirst}}{{if not $f.Nillable}}!{{end}}
+  {{$f.Name | camelize | lowerCaseFirst}}: {{$f.Type | scalarName}}{{if not $f.Nillable}}!{{end}}
 {{- end}}
 }
 
@@ -43,7 +43,7 @@ input {{$name}}WhereInput {
   id: StringFilter
 {{- range $f := $node.Fields}}
 {{- if $f.Unique}}
-  {{$f.Name | camelize | lowerCaseFirst}}: {{$f.Type.String | upperCaseFirst}}Filter
+  {{$f.Name | camelize | lowerCaseFirst}}: {{$f.Type | scalarName}}Filter
 {{- end}}
 {{- end}}
   AND: [{{$name}}WhereInput!]
@@ -56,7 +56,7 @@ extend type Query {
   {{$name | lowerCaseFirst}}(id: ID!): {{$name}}
 {{- range $f := $node.Fields}}
 {{- if $f.Unique}}
-  {{$name | camelize | lowerCaseFirst}}By{{$f.Name | upperCaseFirst}}({{$f.Name | lowerCaseFirst}}: {{$f.Type.String | upperCaseFirst}}!): {{$name}}
+  {{$name | camelize | lowerCaseFirst}}By{{$f.Name | upperCaseFirst}}({{$f.Name | lowerCaseFirst}}: {{$f.Type | scalarName}}!): {{$name}}
 {{- end}}
 {{- end}}
   """Reads and enables pagination through a set of `{{$name}}`."""

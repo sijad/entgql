@@ -1,10 +1,12 @@
 package generator
 
 import (
+	"fmt"
 	"strings"
 	"text/template"
 	"unicode"
 
+	"github.com/facebook/ent/schema/field"
 	"github.com/go-openapi/inflect"
 	"github.com/sijad/entgql/generator/internal"
 )
@@ -29,6 +31,7 @@ var (
 		"singular":       rules.Singularize,
 		"pluralize":      rules.Pluralize,
 		"camelize":       rules.Camelize,
+		"scalarName":     scalarName,
 	}
 	rules    = ruleset()
 	acronyms = make(map[string]struct{})
@@ -60,4 +63,28 @@ func upperCaseFirst(s string) string {
 	r := []rune(s)
 	r[0] = unicode.ToUpper(r[0])
 	return string(r)
+}
+
+func scalarName(typ *field.TypeInfo) (t string) {
+	switch typ.Type {
+	case field.TypeBool:
+		t = "Boolean"
+	case field.TypeTime:
+		t = "Time"
+	case field.TypeJSON:
+		t = "Any"
+	case field.TypeUUID:
+		t = "UUID"
+	case field.TypeString:
+		t = "String"
+	case field.TypeInt, field.TypeInt8, field.TypeInt16, field.TypeInt32, field.TypeInt64:
+		t = "Int"
+	case field.TypeUint, field.TypeUint8, field.TypeUint16, field.TypeUint32, field.TypeUint64:
+		t = "Uint"
+	case field.TypeFloat32, field.TypeFloat64:
+		t = "Float"
+	default:
+		panic(fmt.Sprintf("Type %s is not supported", typ))
+	}
+	return t
 }
