@@ -28,6 +28,7 @@ var (
 		"upperCaseFirst": upperCaseFirst,
 		"singular":       rules.Singularize,
 		"pluralize":      rules.Pluralize,
+		"camelize":       rules.Camelize,
 	}
 	rules    = ruleset()
 	acronyms = make(map[string]struct{})
