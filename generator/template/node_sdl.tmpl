@@ -1,7 +1,7 @@
 {{- $node := . -}}
 {{- $name := .Name -}}
 
-{{/* Enums */}}
+{{/* Enums */ -}}
 enum {{$name}}OrderBy {
   NATURAL
   ID_ASC
@@ -12,11 +12,20 @@ enum {{$name}}OrderBy {
 {{- end}}
 }
 
-{{/* Types */}}
+{{/* Types */ -}}
 type {{$name}} implements Node {
   id: ID!
 {{- range $f := $node.Fields}}
   {{$f.Name | camelize | lowerCaseFirst}}: {{$f.Type | scalarName}}{{if not $f.Nillable}}!{{end}}
+{{- end}}
+{{- range $e := $node.Edges}}
+{{- $eName := $e.Type.Name}}
+{{- if or $e.M2O $e.O2O }}
+  {{$e.Name | camelize | lowerCaseFirst}}: {{$eName}}{{if not $e.Optional}}!{{end}}
+{{- else if or $e.O2M $e.M2M}}
+  """Reads and enables pagination through a set of `{{$eName}}`."""
+  {{$e.Name | camelize | lowerCaseFirst}}(after: String, before: String, first: Int, last: Int, where: {{$eName}}WhereInput, orderBy: [{{$eName}}OrderBy!]): {{$eName}}Connection
+{{- end}}
 {{- end}}
 }
 
@@ -38,7 +47,7 @@ type {{$node.Name}}Connection {
   totalCount: Int!
 }
 
-{{/* Inputes */}}
+{{/* Inputes */ -}}
 input {{$name}}WhereInput {
   id: StringFilter
 {{- range $f := $node.Fields}}
@@ -51,7 +60,7 @@ input {{$name}}WhereInput {
   NOT: [{{$name}}WhereInput!]
 }
 
-{{/* Query */}}
+{{/* Query */ -}}
 extend type Query {
   {{$name | lowerCaseFirst}}(id: ID!): {{$name}}
 {{- range $f := $node.Fields}}
@@ -60,7 +69,7 @@ extend type Query {
 {{- end}}
 {{- end}}
   """Reads and enables pagination through a set of `{{$name}}`."""
-  {{$name | lowerCaseFirst | pluralize}}(after: String, before: String, first: Int, last: Int, where: {{$name}}WhereInput, orderBy: [{{$name}}OrderBy!]): {{$name}}Connection
+  {{$name | camelize | lowerCaseFirst | pluralize}}(after: String, before: String, first: Int, last: Int, where: {{$name}}WhereInput, orderBy: [{{$name}}OrderBy!]): {{$name}}Connection
 }
 
-{{/* Mutation */}}
+{{/* Mutation */ -}}
