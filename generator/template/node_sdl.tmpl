@@ -16,7 +16,9 @@ enum {{$name}}OrderBy {
 type {{$name}} implements Node {
   id: ID!
 {{- range $f := $node.Fields}}
+{{- if not $f.Sensitive }}
   {{$f.Name | camelize | lowerCaseFirst}}: {{$f.Type | scalarName}}{{if not $f.Nillable}}!{{end}}
+{{- end}}
 {{- end}}
 {{- range $e := $node.Edges}}
 {{- $eName := $e.Type.Name}}
@@ -51,13 +53,31 @@ type {{$node.Name}}Connection {
 input {{$name}}WhereInput {
   id: StringFilter
 {{- range $f := $node.Fields}}
-{{- if $f.Unique}}
+{{- if and $f.Unique (not $f.Sensitive)}}
   {{$f.Name | camelize | lowerCaseFirst}}: {{$f.Type | scalarName}}Filter
 {{- end}}
 {{- end}}
   AND: [{{$name}}WhereInput!]
   OR: [{{$name}}WhereInput!]
   NOT: [{{$name}}WhereInput!]
+}
+
+input {{$name}}Input {
+{{- range $f := $node.Fields}}
+  {{$f.Name | camelize | lowerCaseFirst}}: {{$f.Type | scalarName}}{{if not $f.Optional}}!{{end}}
+{{- end}}
+}
+
+input Create{{$name}}Input {
+  clientMutationId: String
+  {{$name | lowerCaseFirst}}: {{$name}}Input!
+}
+
+input Create{{$name}}Payload {
+  """The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations."""
+  clientMutationId: String
+  """The `{{$name}}` that was created by this mutation."""
+  {{$name | lowerCaseFirst}}: {{$name}}!
 }
 
 input Delete{{$name}}Input {
@@ -77,7 +97,7 @@ input Delete{{$name}}Payload {
 extend type Query {
   {{$name | lowerCaseFirst}}(id: ID!): {{$name}}
 {{- range $f := $node.Fields}}
-{{- if $f.Unique}}
+{{- if and $f.Unique (not $f.Sensitive)}}
   {{$name | camelize | lowerCaseFirst}}By{{$f.Name | upperCaseFirst}}({{$f.Name | lowerCaseFirst}}: {{$f.Type | scalarName}}!): {{$name}}
 {{- end}}
 {{- end}}
@@ -87,5 +107,6 @@ extend type Query {
 
 {{/* Mutation */ -}}
 extend type Mutation {
+  create{{$name}}(data: Create{{$name}}Input!): Create{{$name}}Payload
   delete{{$name}}(input: Delete{{$name}}Input!): Delete{{$name}}Payload
 }
