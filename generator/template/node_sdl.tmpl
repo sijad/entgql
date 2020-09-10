@@ -49,6 +49,21 @@ type {{$node.Name}}Connection {
   totalCount: Int!
 }
 
+type Create{{$name}}Payload {
+  """The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations."""
+  clientMutationId: String
+  """The `{{$name}}` that was created by this mutation."""
+  {{$name | lowerCaseFirst}}: {{$name}}!
+}
+
+type Delete{{$name}}Payload {
+  """The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations."""
+  clientMutationId: String
+  """The `{{$name}}` that was deleted by this mutation."""
+  {{$name | lowerCaseFirst}}: {{$name}}!
+  deleted{{$name}}NodeId: ID!
+}
+
 {{/* Inputes */ -}}
 input {{$name}}WhereInput {
   id: StringFilter
@@ -73,24 +88,9 @@ input Create{{$name}}Input {
   {{$name | lowerCaseFirst}}: {{$name}}Input!
 }
 
-input Create{{$name}}Payload {
-  """The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations."""
-  clientMutationId: String
-  """The `{{$name}}` that was created by this mutation."""
-  {{$name | lowerCaseFirst}}: {{$name}}!
-}
-
 input Delete{{$name}}Input {
   clientMutationId: String
   id: ID!
-}
-
-input Delete{{$name}}Payload {
-  """The exact same `clientMutationId` that was provided in the mutation input, unchanged and unused. May be used by a client to track mutations."""
-  clientMutationId: String
-  """The `{{$name}}` that was deleted by this mutation."""
-  {{$name | lowerCaseFirst}}: {{$name}}!
-  deleted{{$name}}NodeId: ID!
 }
 
 {{/* Query */ -}}
@@ -107,6 +107,7 @@ extend type Query {
 
 {{/* Mutation */ -}}
 extend type Mutation {
-  create{{$name}}(data: Create{{$name}}Input!): Create{{$name}}Payload
+  create{{$name}}(input: Create{{$name}}Input!): Create{{$name}}Payload
   delete{{$name}}(input: Delete{{$name}}Input!): Delete{{$name}}Payload
 }
+
