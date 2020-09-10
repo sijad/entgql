@@ -1,0 +1,270 @@
+"""The Uint scalar type represents non-fractional unsigned numeric values."""
+scalar Uint
+
+""""""
+scalar Any
+
+"""A point in time as described by the ISO 8601 standard. May or may not include a timezone."""
+scalar Time
+
+"""A universally unique identifier as defined by [RFC 4122](https://tools.ietf.org/html/rfc4122)."""
+scalar UUID
+
+"""A location in a connection that can be used for resuming pagination."""
+scalar Cursor
+
+"""An object with a globally unique `ID`."""
+interface Node {
+  """A globally unique identifier. Can be used in various places throughout the system to identify this single value."""
+  id: ID!
+}
+
+"""Information about pagination in a connection."""
+type PageInfo {
+  """When paginating forwards, are there more items?"""
+  hasNextPage: Boolean!
+
+  """When paginating backwards, are there more items?"""
+  hasPreviousPage: Boolean!
+
+  """When paginating backwards, the cursor to continue."""
+  startCursor: String
+
+  """When paginating forwards, the cursor to continue."""
+  endCursor: String
+}
+
+"""A filter to be used against String fields. All fields are combined with a logical ‘and.’"""
+input StringFilter {
+  """Is null (if `true` is specified) or is not null (if `false` is specified)."""
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: String
+
+  """Not equal to the specified value."""
+  notEqualTo: String
+
+  """Included in the specified list."""
+  in: [String!]
+
+  """Not included in the specified list."""
+  notIn: [String!]
+
+  """Less than the specified value."""
+  lessThan: String
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: String
+
+  """Greater than the specified value."""
+  greaterThan: String
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: String
+
+  """Contains the specified string (case-sensitive)."""
+  includes: String
+
+  """Does not contain the specified string (case-sensitive)."""
+  notIncludes: String
+
+  """Contains the specified string (case-insensitive)."""
+  includesInsensitive: String
+
+  """Does not contain the specified string (case-insensitive)."""
+  notIncludesInsensitive: String
+
+  """Starts with the specified string (case-sensitive)."""
+  startsWith: String
+
+  """Does not start with the specified string (case-sensitive)."""
+  notStartsWith: String
+
+  """Starts with the specified string (case-insensitive)."""
+  startsWithInsensitive: String
+
+  """Does not start with the specified string (case-insensitive)."""
+  notStartsWithInsensitive: String
+
+  """Ends with the specified string (case-sensitive)."""
+  endsWith: String
+
+  """Does not end with the specified string (case-sensitive)."""
+  notEndsWith: String
+
+  """Ends with the specified string (case-insensitive)."""
+  endsWithInsensitive: String
+
+  """Does not end with the specified string (case-insensitive)."""
+  notEndsWithInsensitive: String
+
+  """Matches the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters."""
+  like: String
+
+  """Does not match the specified pattern (case-sensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters."""
+  notLike: String
+
+  """Matches the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters."""
+  likeInsensitive: String
+
+  """Does not match the specified pattern (case-insensitive). An underscore (_) matches any single character; a percent sign (%) matches any sequence of zero or more characters."""
+  notLikeInsensitive: String
+}
+
+"""A filter to be used against Int fields. All fields are combined with a logical ‘and.’"""
+input IntFilter {
+  """Is null (if `true` is specified) or is not null (if `false` is specified)."""
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: Int
+
+  """Not equal to the specified value."""
+  notEqualTo: Int
+
+  """Included in the specified list."""
+  in: [Int!]
+
+  """Not included in the specified list."""
+  notIn: [Int!]
+
+  """Less than the specified value."""
+  lessThan: Int
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: Int
+
+  """Greater than the specified value."""
+  greaterThan: Int
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: Int
+}
+
+"""A filter to be used against Uint fields. All fields are combined with a logical ‘and.’"""
+input UintFilter {
+  """Is null (if `true` is specified) or is not null (if `false` is specified)."""
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: Uint
+
+  """Not equal to the specified value."""
+  notEqualTo: Uint
+
+  """Included in the specified list."""
+  in: [Uint!]
+
+  """Not included in the specified list."""
+  notIn: [Uint!]
+
+  """Less than the specified value."""
+  lessThan: Uint
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: Uint
+
+  """Greater than the specified value."""
+  greaterThan: Uint
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: Uint
+}
+
+"""A filter to be used against Float fields. All fields are combined with a logical ‘and.’"""
+input FloatFilter {
+  """Is null (if `true` is specified) or is not null (if `false` is specified)."""
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: Float
+
+  """Not equal to the specified value."""
+  notEqualTo: Float
+
+  """Included in the specified list."""
+  in: [Float!]
+
+  """Not included in the specified list."""
+  notIn: [Float!]
+
+  """Less than the specified value."""
+  lessThan: Float
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: Float
+
+  """Greater than the specified value."""
+  greaterThan: Float
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: Float
+}
+
+"""A filter to be used against UUID fields. All fields are combined with a logical ‘and.’"""
+input UUIDFilter {
+  """Is null (if `true` is specified) or is not null (if `false` is specified)."""
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: UUID
+
+  """Not equal to the specified value."""
+  notEqualTo: UUID
+
+  """Included in the specified list."""
+  in: [UUID!]
+
+  """Not included in the specified list."""
+  notIn: [UUID!]
+}
+
+"""A filter to be used against Time fields. All fields are combined with a logical ‘and.’"""
+input TimeFilter {
+  """Is null (if `true` is specified) or is not null (if `false` is specified)."""
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: Time
+
+  """Not equal to the specified value."""
+  notEqualTo: Time
+
+  """Included in the specified list."""
+  in: [Time!]
+
+  """Not included in the specified list."""
+  notIn: [Time!]
+
+  """Less than the specified value."""
+  lessThan: Time
+
+  """Less than or equal to the specified value."""
+  lessThanOrEqualTo: Time
+
+  """Greater than the specified value."""
+  greaterThan: Time
+
+  """Greater than or equal to the specified value."""
+  greaterThanOrEqualTo: Time
+}
+
+"""A filter to be used against Boolean fields. All fields are combined with a logical ‘and.’"""
+input BooleanFilter {
+  """Is null (if `true` is specified) or is not null (if `false` is specified)."""
+  isNull: Boolean
+
+  """Equal to the specified value."""
+  equalTo: Boolean
+
+  """Not equal to the specified value."""
+  notEqualTo: Boolean
+}
+
+"""A filter to be used against Any fields. All fields are combined with a logical ‘and.’"""
+input BooleanFilter {
+  """Is null (if `true` is specified) or is not null (if `false` is specified)."""
+  isNull: Boolean
+}
+
