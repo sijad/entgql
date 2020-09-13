@@ -2,6 +2,7 @@ package generator
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 	"text/template"
 	"unicode"
@@ -32,6 +33,7 @@ var (
 		"pluralize":      rules.Pluralize,
 		"camelize":       rules.Camelize,
 		"scalarName":     scalarName,
+		"quote":          strconv.Quote,
 	}
 	rules    = ruleset()
 	acronyms = make(map[string]struct{})

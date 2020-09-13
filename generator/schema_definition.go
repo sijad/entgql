@@ -11,9 +11,13 @@ func SchemaDefinition(wr io.Writer, g *gen.Graph) error {
 		return err
 	}
 	for _, t := range g.Nodes {
-		if err := templates.ExecuteTemplate(wr, "template/node_sdl.tmpl", t); err != nil {
+		if err := NodeSchemaDefinition(wr, t); err != nil {
 			return err
 		}
 	}
 	return nil
+}
+
+func NodeSchemaDefinition(wr io.Writer, t *gen.Type) error {
+	return templates.ExecuteTemplate(wr, "template/node_sdl.tmpl", t)
 }

@@ -17,4 +17,7 @@ func TestVarType(t *testing.T) {
 	if err := SchemaDefinition(os.Stdout, graph); err != nil {
 		t.Error(t)
 	}
+	if err := Models(os.Stdout, graph); err != nil {
+		t.Error(t)
+	}
 }
