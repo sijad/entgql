@@ -1,0 +1,18 @@
+{{- $node := . -}}
+{{- $name := .Name -}}
+{{- $idType := "int" -}}
+{{- if .IDType -}}
+	{{$idType := .IDType | goType}}
+{{- end -}}
+
+func (r *queryResolver) {{$name}}(ctx context.Context, id {{$idType}}) (*model.{{$name}}, error) {
+	q := r.EntClient.{{$name}}.Query()
+	q.Where({{$node.Package}}.ID(id))
+	res, _ := q.Only(ctx)
+	if res == nil {
+		return nil, nil
+	}
+	m := (*model.{{$name}})(res)
+	return m, nil
+}
+

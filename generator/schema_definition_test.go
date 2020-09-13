@@ -21,4 +21,7 @@ func TestVarType(t *testing.T) {
 	if err := generator.Models(os.Stdout); err != nil {
 		t.Error(t)
 	}
+	if err := generator.Resolvers(os.Stdout); err != nil {
+		t.Error(t)
+	}
 }

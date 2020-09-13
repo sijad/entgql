@@ -13,16 +13,20 @@ type ResolversData struct {
 }
 
 func (g *Generator) Resolvers(wr io.Writer) error {
-	imports := map[string]string{
-		g.Graph.Package: "ent",
+	imports := map[string]string{}
+
+	buf := &bytes.Buffer{}
+	pkg := g.Graph.Config.Package
+
+	for _, t := range g.Graph.Nodes {
+		name := t.Package()
+		imports[pkg+"/"+name] = ""
+		// TODO import other inputs types
 	}
 
 	data := &ModelsData{
 		Imports: imports,
 	}
-
-	buf := &bytes.Buffer{}
-
 	if err := templates.ExecuteTemplate(buf, "template/base_resolvers_go.tmpl", data); err != nil {
 		return err
 	}

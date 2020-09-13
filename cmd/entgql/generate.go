@@ -25,7 +25,9 @@ func generate(entSchemaPath, generatedGraphqlPath, generatedResolversPath, gener
 		return fmt.Errorf("generate models: %w", err)
 	}
 
-	// TODO generate code
+	if err := generatedResolvers(g, generatedResolversPath); err != nil {
+		return fmt.Errorf("generate resolvers: %w", err)
+	}
 
 	return nil
 }
@@ -46,4 +48,13 @@ func generatedModels(g *generator.Generator, filePath string) error {
 	}
 	defer file.Close()
 	return g.Models(file)
+}
+
+func generatedResolvers(g *generator.Generator, filePath string) error {
+	file, err := os.Create(filePath)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+	return g.Resolvers(file)
 }

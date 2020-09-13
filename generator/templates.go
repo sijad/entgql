@@ -33,6 +33,7 @@ var (
 		"pluralize":      rules.Pluralize,
 		"camelize":       rules.Camelize,
 		"scalarName":     scalarName,
+		"goType":         goType,
 		"quote":          strconv.Quote,
 	}
 	rules    = ruleset()
@@ -89,4 +90,11 @@ func scalarName(typ *field.TypeInfo) (t string) {
 		panic(fmt.Sprintf("Type %s is not supported", typ))
 	}
 	return t
+}
+
+func goType(typ *field.TypeInfo) (t string) {
+	if typ.Type == field.TypeInvalid {
+		panic(fmt.Sprintf("Type %s is not supported", typ))
+	}
+	return typ.Type.String()
 }

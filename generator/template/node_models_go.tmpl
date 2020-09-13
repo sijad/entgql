@@ -1,9 +1,5 @@
 {{- $node := . -}}
 {{- $name := .Name -}}
-{{- $idType := "Int" -}}
-{{- if .IDType -}}
-	{{$idType := .IDType | scalarName}}
-{{- end -}}
 
 type {{$name}} ent.{{$name}}
 
