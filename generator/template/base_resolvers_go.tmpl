@@ -1,0 +1,8 @@
+package graph
+
+import (
+{{- range $imp, $alias := .Imports}}
+	{{$alias}} {{$imp | quote}}
+{{- end -}}
+)
+
