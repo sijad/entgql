@@ -15,11 +15,13 @@ func generate(entSchemaPath, generatedGraphqlPath, generatedResolversPath, gener
 		return fmt.Errorf("generate: %w", err)
 	}
 
-	if err := generateSchema(graph, generatedGraphqlPath); err != nil {
+	g := &generator.Generator{Graph: graph}
+
+	if err := generateSchema(g, generatedGraphqlPath); err != nil {
 		return fmt.Errorf("generate schema: %w", err)
 	}
 
-	if err := generatedModels(graph, generatedModelsPath); err != nil {
+	if err := generatedModels(g, generatedModelsPath); err != nil {
 		return fmt.Errorf("generate models: %w", err)
 	}
 
@@ -28,20 +30,20 @@ func generate(entSchemaPath, generatedGraphqlPath, generatedResolversPath, gener
 	return nil
 }
 
-func generateSchema(graph *gen.Graph, filePath string) error {
+func generateSchema(g *generator.Generator, filePath string) error {
 	file, err := os.Create(filePath)
 	if err != nil {
 		return err
 	}
 	defer file.Close()
-	return generator.SchemaDefinition(file, graph)
+	return g.SchemaDefinition(file)
 }
 
-func generatedModels(graph *gen.Graph, filePath string) error {
+func generatedModels(g *generator.Generator, filePath string) error {
 	file, err := os.Create(filePath)
 	if err != nil {
 		return err
 	}
 	defer file.Close()
-	return generator.Models(file, graph)
+	return g.Models(file)
 }

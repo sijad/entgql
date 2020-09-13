@@ -12,9 +12,9 @@ type ModelsData struct {
 	Imports map[string]string
 }
 
-func Models(wr io.Writer, g *gen.Graph) error {
+func (g *Generator) Models(wr io.Writer) error {
 	imports := map[string]string{
-		g.Package: "ent",
+		g.Graph.Package: "ent",
 	}
 
 	data := &ModelsData{
@@ -27,8 +27,8 @@ func Models(wr io.Writer, g *gen.Graph) error {
 		return err
 	}
 
-	for _, t := range g.Nodes {
-		if err := NodeModels(buf, t); err != nil {
+	for _, t := range g.Graph.Nodes {
+		if err := nodeModels(buf, t); err != nil {
 			return err
 		}
 	}
@@ -49,6 +49,6 @@ func Models(wr io.Writer, g *gen.Graph) error {
 	return nil
 }
 
-func NodeModels(wr io.Writer, t *gen.Type) error {
+func nodeModels(wr io.Writer, t *gen.Type) error {
 	return templates.ExecuteTemplate(wr, "template/node_models_go.tmpl", t)
 }

@@ -11,13 +11,14 @@ import (
 func TestVarType(t *testing.T) {
 	entSchemaPath := "./testdata/basic/ent/schema"
 	graph, err := entc.LoadGraph(entSchemaPath, &gen.Config{})
+	generator := &Generator{Graph: graph}
 	if err != nil {
 		t.Error(err)
 	}
-	if err := SchemaDefinition(os.Stdout, graph); err != nil {
+	if err := generator.SchemaDefinition(os.Stdout); err != nil {
 		t.Error(t)
 	}
-	if err := Models(os.Stdout, graph); err != nil {
+	if err := generator.Models(os.Stdout); err != nil {
 		t.Error(t)
 	}
 }
