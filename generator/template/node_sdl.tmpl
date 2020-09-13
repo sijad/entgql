@@ -1,5 +1,9 @@
 {{- $node := . -}}
 {{- $name := .Name -}}
+{{- $idType := "Int" -}}
+{{- if .IDType -}}
+	{{$idType := .IDType | scalarName}}
+{{- end -}}
 
 {{/* Enums */ -}}
 enum {{$name}}OrderBy {
@@ -66,7 +70,7 @@ type Delete{{$name}}Payload {
 
 {{/* Inputes */ -}}
 input {{$name}}WhereInput {
-  id: StringFilter
+  id: {{$idType}}Filter
 {{- range $f := $node.Fields}}
 {{- if and $f.Unique (not $f.Sensitive)}}
   {{$f.Name | camelize | lowerCaseFirst}}: {{$f.Type | scalarName}}Filter
@@ -90,12 +94,12 @@ input Create{{$name}}Input {
 
 input Delete{{$name}}Input {
   clientMutationId: String
-  id: ID!
+  id: {{$idType}}!
 }
 
 {{/* Query */ -}}
 extend type Query {
-  {{$name | lowerCaseFirst}}(id: ID!): {{$name}}
+  {{$name | lowerCaseFirst}}(id: {{$idType}}!): {{$name}}
 {{- range $f := $node.Fields}}
 {{- if and $f.Unique (not $f.Sensitive)}}
   {{$name | camelize | lowerCaseFirst}}By{{$f.Name | upperCaseFirst}}({{$f.Name | lowerCaseFirst}}: {{$f.Type | scalarName}}!): {{$name}}
