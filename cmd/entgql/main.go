@@ -16,7 +16,13 @@ func main() {
 			Args:    cobra.ExactArgs(1),
 			Run: func(cmd *cobra.Command, paths []string) {
 				entSchemaPath := paths[0]
-				if err := generate(entSchemaPath, defaultGeneratedGraphqlSchemaPath, defaultGeneratedResolversPath); err != nil {
+				if err := generate(
+					entSchemaPath,
+					defaultGeneratedGraphqlSchemaPath,
+					defaultGeneratedResolversPath,
+					defaultGeneratedHelpersPath,
+					defaultGeneratedModelsPath,
+				); err != nil {
 					log.Fatalln(err)
 				}
 			},
@@ -31,4 +37,6 @@ func main() {
 const (
 	defaultGeneratedGraphqlSchemaPath = "./graph/ent_schema.graphqls"
 	defaultGeneratedResolversPath     = "./graph/ent_schema.resolvers.go"
+	defaultGeneratedHelpersPath       = "./graph/ent_schema.helpers.go"
+	defaultGeneratedModelsPath        = "./graph/model/ent_models_gen.go"
 )
