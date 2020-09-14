@@ -10,10 +10,10 @@
 
 it's recommended to install entgql using [Go modules](https://github.com/golang/go/wiki/Modules#quick-start).
 
-1. [install ent.](https://entgo.io/docs/getting-started/) generate your models
-2. create [a new gqlgen project](https://gqlgen.com/getting-started/)
-3. install entgql `go get github.com/sijad/entgql/cmd/entgql`
-4. generate CRUD code for the models `go run github.com/sijad/entgql/cmd/entgql generate ./ent/schema`
+1. create [a new gqlgen project](https://gqlgen.com/getting-started/)
+2. [install ent.](https://entgo.io/docs/getting-started/) and generate your models
+3. install entgql by running `go get github.com/sijad/entgql/cmd/entgql`
+4. generate CRUD code for your ent schema using `go run github.com/sijad/entgql/cmd/entgql generate ./ent/schema`
 5. edit `./graph/resolver.go` and add ent client to the resolver struct:
 ```diff
 -type Resolver struct{}
@@ -40,7 +40,7 @@ func main() {
 +	srv := handler.NewDefaultServer(generated.NewExecutableSchema(generated.Config{Resolvers: &graph.Resolver{EntClient: client}}))
 // ...
 ```
-7. start your server `go run server.go`
+7. start your GraphQL server `go run server.go`
 
 ### Credits
 
