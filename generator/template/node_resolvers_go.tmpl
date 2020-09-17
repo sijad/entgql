@@ -8,11 +8,34 @@
 func (r *queryResolver) {{$name}}(ctx context.Context, id {{$idType}}) (*model.{{$name}}, error) {
 	q := r.EntClient.{{$name}}.Query()
 	q.Where({{$node.Package}}.ID(id))
+
 	res, _ := q.Only(ctx)
 	if res == nil {
 		return nil, nil
 	}
-	m := (*model.{{$name}})(res)
+	m := &model.{{$name}}{ {{$name}}: res }
 	return m, nil
 }
 
+func (r *queryResolver) {{$name | pluralize}}(ctx context.Context, after *string, before *string, first *int, last *int, where *model.{{$name}}WhereInput, orderBy []model.{{$name}}OrderBy) (*model.{{$name}}Connection, error) {
+	// TODO
+	panic(fmt.Errorf("not implemented"))
+}
+
+{{range $e := $node.Edges}}
+{{- $eName := $e.Type.Name}}
+{{- if or $e.M2O $e.O2O -}}
+func (r *{{$name | lowerCaseFirst}}Resolver) {{$e.Name | upperCaseFirst}}(ctx context.Context, obj *model.{{$name}}) (*model.{{$eName}}, error) {
+	res, err := obj.Query{{$e.Name | upperCaseFirst}}().Only(ctx)
+	if err != nil {
+		return nil, nil
+	}
+	return &model.{{$eName}}{ {{$eName}}: res }, nil
+}
+{{- else -}}
+func (r *{{$name | lowerCaseFirst}}Resolver) {{$e.Name | camelize | upperCaseFirst}}(ctx context.Context, obj *model.{{$name}}, after *string, before *string, first *int, last *int, where *model.{{$eName}}WhereInput, orderBy []model.{{$eName}}OrderBy) (*model.{{$eName}}Connection, error) {
+	// TODO
+	panic(fmt.Errorf("not implemented"))
+}
+{{ end }}
+{{ end }}

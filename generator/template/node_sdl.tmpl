@@ -28,7 +28,7 @@ type {{$name}} implements Node {
 {{- $eName := $e.Type.Name}}
 {{- if or $e.M2O $e.O2O }}
   {{$e.Name | camelize | lowerCaseFirst}}: {{$eName}}{{if not $e.Optional}}!{{end}}
-{{- else if or $e.O2M $e.M2M}}
+{{- else }}
   """Reads and enables pagination through a set of `{{$eName}}`."""
   {{$e.Name | camelize | lowerCaseFirst}}(after: String, before: String, first: Int, last: Int, where: {{$eName}}WhereInput, orderBy: [{{$eName}}OrderBy!]): {{$eName}}Connection
 {{- end}}

@@ -1,7 +1,9 @@
 {{- $node := . -}}
 {{- $name := .Name -}}
 
-type {{$name}} ent.{{$name}}
+type {{$name}} struct {
+	*ent.{{$name}}
+}
 
 func({{$name}}) IsNode() {}
 
